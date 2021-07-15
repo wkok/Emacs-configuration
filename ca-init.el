@@ -15,7 +15,7 @@
 
 (require 'package)
 (package-initialize)
-(package-refresh-contents)
+;; (package-refresh-contents)
 (setq use-package-always-ensure t)
 
 (setq custom-safe-themes t)
