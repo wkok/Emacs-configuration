@@ -1,6 +1,10 @@
 1;; Set font size
 (set-face-attribute 'default nil :height 200)
 
+(smartparens-global-strict-mode t)
+
+(load-theme 'dracula t)
+
 ;; (add-hook 'clojure-mode-hook
 ;;   (lambda ()
 ;;     (local-set-key (kbd "M-(") 'paredit-wrap-round)))
