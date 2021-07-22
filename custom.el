@@ -5,6 +5,9 @@
 
 (load-theme 'dracula t)
 
+(setq plantuml-jar-path "~/bin/plantuml/plantuml.jar")
+(setq plantuml-default-exec-mode 'jar)
+
 ;; (add-hook 'clojure-mode-hook
 ;;   (lambda ()
 ;;     (local-set-key (kbd "M-(") 'paredit-wrap-round)))
