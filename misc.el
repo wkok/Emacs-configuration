@@ -1,22 +1,21 @@
-(setq
- backup-by-copying t      ; don't clobber symlinks
- backup-directory-alist '(("." . "~/.saves"))    ; don't litter my fs tree
- delete-old-versions t
- kept-new-versions 6
- kept-old-versions 2
- version-control t
- vc-make-backup-files t)       ; use versioned backups
+(setq backup-by-copying t      ; don't clobber symlinks
+      backup-directory-alist '(("." . "~/.saves"))    ; don't litter my fs tree
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t
+      vc-make-backup-files t)       ; use versioned backups
 
-(setq
- initial-major-mode 'emacs-lisp-mode
- inhibit-startup-message t
- initial-scratch-message nil
- confirm-nonexistent-file-or-buffer nil)
+(setq initial-major-mode 'emacs-lisp-mode
+      inhibit-startup-message t
+      initial-scratch-message nil
+      confirm-nonexistent-file-or-buffer nil)
 
 (setq-default indent-tabs-mode nil)
 
-(setq visible-bell nil) ; Turn beep off
-(setq ring-bell-function 'ignore)
+(setq visible-bell nil
+      ring-bell-function 'ignore) ; Turn beep off
+
 (savehist-mode t) ; save also minibuffer history, very useful
 
 (global-set-key [f1] 'delete-window)
@@ -28,3 +27,20 @@
 (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(set-fringe-mode 10)
+
+(global-unset-key (kbd "C-z"))
+
+;; set a font with something like
+;; (set-face-attribute 'default nil :font "Fira Code" :height 140)
+
+(set-default-coding-systems 'utf-8)
+
+(server-start)
+
+(setq display-time-format "%l:%M %p %b %y"
+      display-time-default-load-average nil)
+
+;; useful for lsp and other external processes
+(setq read-process-output-max (* 1024 1024))

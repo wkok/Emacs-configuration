@@ -1,7 +1,23 @@
+;; performance changes
+
+(setq gc-cons-threshold (* 50 1000 1000))
+
+;; Profile emacs startup
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "*** Emacs loaded in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
+
+
 (setq package-archives
       '(("org" . "https://orgmode.org/elpa/")
         ("melpa" . "http://melpa.org/packages/")
         ("gnu" . "http://elpa.gnu.org/packages/")))
+
+(setq use-package-always-ensure t)
 
 (eval-when-compile (require 'cl))
 
@@ -15,7 +31,7 @@
 
 (require 'package)
 (package-initialize)
-;; (package-refresh-contents)
+(package-refresh-contents)
 (setq use-package-always-ensure t)
 
 (setq custom-safe-themes t)
@@ -33,16 +49,21 @@
   (auto-package-update-maybe))
 
 (use-package ack)
-(use-package adoc-mode)
+(use-package adoc-mode
+  :init
+  (add-to-list 'auto-mode-alist (cons "\\.adoc\\'" 'adoc-mode))
+  (add-to-list 'auto-mode-alist (cons "\\.txt\\'" 'adoc-mode))
+  ;; (add-hook 'adoc-mode-hook (lambda () (buffer-face-mode t)))
+  )
+
 (use-package ag)
-(use-package auto-highlight-symbol)
+;; (use-package auto-highlight-symbol)
 (use-package autorevert
   :config
   (setq auto-revert-interval 1)
   (global-auto-revert-mode))
 
 (use-package beacon
-  :ensure t
   :custom
   (beacon-blink-duration 0.5))
 
@@ -55,7 +76,6 @@
   (cljr-add-ns-to-blank-clj-files nil))
 
 (use-package cider
-  :ensure t
   :defer t
   :init (add-hook 'cider-mode-hook #'clj-refactor-mode)
   :diminish subword-mode
@@ -65,7 +85,6 @@
         nrepl-hide-special-buffers t
 
         cider-overlays-use-font-lock t)
-  (cider-repl-toggle-pretty-printing)
   :custom
   (cider-prompt-for-symbol nil)
   (cider-repl-display-help-banner nil)
@@ -82,10 +101,8 @@
 
 (use-package clj-refactor)
 (use-package clojure-mode
-  :ensure t
   :mode (("\\.clj\\'" . clojure-mode)
          ("\\.edn\\'" . clojure-mode))
-  :bind (("M-." . lsp-find-definition))
   :init
   (add-hook 'clojure-mode-hook #'subword-mode)
   (add-to-list 'auto-mode-alist '("\\.bb" . clojure-mode)))
@@ -94,20 +111,23 @@
 
 (use-package company
   :init (global-company-mode)
-  :ensure t
   :custom
   (company-tooltip-align-annotations t)
   (company-minimum-prefix-length 1)
   (company-idle-delay 0.3)
   (company-show-numbers t))
 
+(use-package command-log-mode)
+
 (use-package company-dict)
 (use-package company-restclient)
 (use-package company-shell)
+(use-package csharp-mode)
 (use-package csv-mode)
 (use-package diff-hl
   :config (global-diff-hl-mode))
 
+(use-package diminish)
 (use-package docker)
 (use-package dockerfile-mode)
 (use-package dracula-theme)
@@ -118,11 +138,12 @@
 
 (use-package elein)
 (use-package emmet-mode)
-(use-package expand-region)
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
+
 (use-package fancy-narrow)
 (use-package find-file-in-repository)
 (use-package flycheck
-  :ensure t
   :init (global-flycheck-mode))
 
 (use-package flycheck-clj-kondo)
@@ -136,7 +157,18 @@
 
 (use-package gist)
 (use-package git-commit)
+(use-package git-auto-commit-mode
+  :custom
+  (gac-debounce-interval 0.5))
+
 (use-package gitconfig)
+(use-package git-gutter
+  :diminish
+  :hook ((text-mode . git-gutter-mode)
+         (prog-mode . git-gutter-mode))
+  :config
+  (setq git-gutter:update-interval 2))
+
 (use-package guru-mode
   :custom
   (guru-warn-only t)
@@ -151,7 +183,6 @@
 (use-package json-mode)
 
 (use-package kaocha-runner
-  :ensure t
   :bind (:map clojure-mode-map
               ("C-c k t" . kaocha-runner-run-test-at-point)
               ("C-c k r" . kaocha-runner-run-tests)
@@ -174,6 +205,9 @@
          (web-mode . lsp)
          (sh-mode . lsp))
 
+  :bind (("M-?" . lsp-find-definition)
+         ("M-/" . lsp-find-references)
+         ("M-'" . lsp-treemacs-call-hierarchy))
   :config
   ;; add paths to your local installation of project mgmt tools, like lein
   (setenv "PATH" (concat "/usr/local/bin" path-separator (getenv "PATH")))
@@ -199,10 +233,16 @@
   (lsp-idle-delay .01)
   (lsp-keymap-prefix nil))
 
+(use-package lsp-java)
+
 (use-package lsp-ui
   :disabled t
   :config
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  (setq lsp-ui-sideline-enable t)
+  (setq lsp-ui-sideline-show-hover nil)
+  (setq lsp-ui-doc-position 'bottom)
+  (lsp-ui-doc-show))
 
 (use-package restclient
   :init
@@ -231,7 +271,19 @@
 (use-package magit
   :bind (("\C-xg" . magit-status)))
 
-(use-package markdown-mode)
+(use-package marginalia
+  :bind (("M-A" . marginalia-cycle)
+         :map minibuffer-local-map
+         ("M-A". marginalia-cycle))
+
+  :init
+  (marginalia-mode))
+
+(use-package markdown-mode
+  :init
+  ;; (add-hook 'markdown-mode-hook (lambda () (buffer-face-mode t)))
+  (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode)))
+
 (use-package multiple-cursors
   :bind ("C->" . mc/mark-next-like-this)
   ("C-<" . mc/mark-previous-like-this)
@@ -239,10 +291,55 @@
 
 (use-package nix-mode)
 (use-package ox-reveal)
+
+(defun ca-org-mode-setup ()
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (auto-fill-mode 0)
+  (visual-line-mode 1))
+
+(require 'ob-clojure)
+
 (use-package org
+  :hook (org-mode . ca-org-mode-setup)
+  :bind
+  (("C-c a" . org-agenda))
+  :config
+  (setq org-ellipsis " ▾"
+        org-hide-emphasis-markers t
+        org-src-fontify-natively t
+        org-fontify-quote-and-verse-blocks t
+        org-src-tab-acts-natively t
+        org-edit-src-content-indentation 2
+        org-hide-block-startup nil
+        org-src-preserve-indentation nil
+        org-startup-folded 'content
+        org-cycle-separator-lines 2
+        org-babel-clojure-backend 'cider)
   :custom
-  (org-src-tab-acts-natively t))
-(use-package org-bullets)
+  (org-src-tab-acts-natively t)
+  (org-hide-emphasis-markers t)
+  (org-agenda-files (list (file-truename "~/RoamNotes/"))))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode))
+
+(use-package org-roam
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory (file-truename "~/RoamNotes"))
+  (org-roam-completion-everywhere t)
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n c" . org-roam.capture)
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  (org-roam-setup))
+
 (use-package paradox)
 (use-package persistent-scratch
   :config
@@ -255,7 +352,6 @@
 
 (use-package projectile
   :diminish projectile
-  :ensure t
   :config
   (projectile-global-mode)
   :bind (("<f6>" . projectile-ag)
@@ -272,13 +368,11 @@
   (projectile-completion-system 'default))
 
 (use-package rainbow-delimiters
-  :ensure t
   :delight
   :config
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 (use-package rainbow-mode
-  :ensure t
   :delight
   :config
   (add-hook 'prog-mode-hook #'rainbow-mode))
@@ -291,10 +385,8 @@
   :init (sml/setup))
 
 (use-package smartparens
-  :ensure t
   :delight
   :config
-  (require 'smartparens-config)
   (smartparens-global-strict-mode t)
   :bind
   (("C-M-f" . sp-forward-sexp)
@@ -316,12 +408,14 @@
    ("M-F" . sp-forward-symbol)
    ("M-B" . sp-backward-symbol)))
 
+(use-package smartparens-config
+  :ensure smartparens
+  :config (progn (show-smartparens-global-mode t)))
+
 (use-package selectrum
-  :ensure t
   :config (selectrum-mode))
 
 (use-package selectrum-prescient
-  :ensure t
   :config (selectrum-prescient-mode))
 
 (use-package time
@@ -340,11 +434,9 @@
 (use-package wordnut)
 (use-package yaml-mode)
 
-;; (use-package yasnippet-snippets
-;;   :ensure t)
+(use-package yasnippet-snippets)
 
 (use-package yasnippet
-  :ensure t
   :custom
   (yas-verbosity 2)
   (yas-wrap-around-region t)
@@ -379,15 +471,14 @@
 (global-prettify-symbols-mode t)
 (transient-mark-mode t)
 
-(use-package dumb-jump
-  :ensure t
-  :bind (("M-?" . dumb-jump-go)))
+(use-package diredfl
+  :config
+  (diredfl-global-mode))
 
 (use-package ibuffer
   :bind (("C-x C-b" . ibuffer)))
 
 (use-package ibuffer-vc
-  :ensure t
   :defer t
   :init (add-hook 'ibuffer-hook
                   (lambda ()
@@ -395,36 +486,30 @@
                     (unless (eq ibuffer-sorting-mode 'alphabetic)
                       (ibuffer-do-sort-by-alphabetic)))))
 
+;; this might affect multiple cursors in a weird way,
+;; since you can't just write to replace
+;; (use-package selected
+;;   :commands selected-minor-mode
+;;   :init
+;;   (setq selected-org-mode-map (make-sparse-keymap))
+;;   :bind (:map selected-keymap
+;;               ("q" . selected-off)
+;;               ("u" . upcase-region)
+;;               ("d" . downcase-region)
+;;               ("w" . count-words-region)
+;;               ("m" . apply-macro-to-region-lines)
+;;               :map selected-org-mode-map
+;;               ("t" . org-table-convert-region)))
+
 (use-package winner
   :config (winner-mode t))
+
+(use-package wakatime-mode)
 
 (global-set-key (kbd "M-p") 'ca-prev-defun)
 (global-set-key (kbd "M-n") 'ca-next-defun)
 
-(defalias 'bb 'bury-buffer)
-(defalias 'dml 'delete-matching-lines)
-(defalias 'eb 'eval-buffer)
-(defalias 'elm 'emacs-lisp-mode)
-(defalias 'er 'eval-region)
-(defalias 'go 'google-search-it)
-(defalias 'gs 'google-search-selection)
-(defalias 'll 'load-library)
-(defalias 'qrs 'query-replace-regexp)
-(defalias 'qs 'query-replace)
-(defalias 'rs 'replace-string)
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-(defalias 'ys 'yas/reload-all)
-(defalias 'yv 'yas/visit-snippet-file)
-
-(defalias 'rb 'revert-buffer)
-
-(defalias 'sh 'shell)
-
-(defalias 'ws 'whitespace-mode)
-(defalias 'bu 'browse-url)
-
-(dolist (f '("custom.el" "hacks.el"))
+(dolist (f '("aliases.el" "hacks.el" "custom.el"))
   (when (file-exists-p (make-relative-path f))
     (message "loading extra file" f)
     (load-file (make-relative-path f))))
