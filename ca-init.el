@@ -124,6 +124,11 @@
 (use-package company-shell)
 (use-package csharp-mode)
 (use-package csv-mode)
+(use-package dap-mode
+  :hook
+  (lsp-mode . dap-mode)
+  (lsp-mode . dap-ui-mode))
+
 (use-package diff-hl
   :config (global-diff-hl-mode))
 
@@ -162,12 +167,12 @@
   (gac-debounce-interval 0.5))
 
 (use-package gitconfig)
-(use-package git-gutter
-  :diminish
-  :hook ((text-mode . git-gutter-mode)
-         (prog-mode . git-gutter-mode))
-  :config
-  (setq git-gutter:update-interval 2))
+;; (use-package git-gutter
+;;   :diminish
+;;   :hook ((text-mode . git-gutter-mode)
+;;          (prog-mode . git-gutter-mode))
+;;   :config
+;;   (setq git-gutter:update-interval 2))
 
 (use-package guru-mode
   :custom
@@ -202,6 +207,7 @@
   :hook ((clojure-mode . lsp)
          (clojurec-mode . lsp)
          (clojurescript-mode . lsp)
+         (scala-mode . lsp)
          (web-mode . lsp)
          (sh-mode . lsp))
 
@@ -209,9 +215,13 @@
          ("M-/" . lsp-find-references)
          ("M-'" . lsp-treemacs-call-hierarchy))
   :config
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))
+  (setq lsp-idle-delay 0.500)
+  (setq lsp-log-io nil)
+  (setq lsp-completion-provider :capf)
   ;; add paths to your local installation of project mgmt tools, like lein
   (setenv "PATH" (concat "/usr/local/bin" path-separator (getenv "PATH")))
-
   (dolist (m '(clojure-mode
                clojurec-mode
                clojurescript-mode
@@ -234,6 +244,8 @@
   (lsp-keymap-prefix nil))
 
 (use-package lsp-java)
+
+(use-package lsp-metals)
 
 (use-package lsp-ui
   :disabled t
@@ -345,6 +357,8 @@
   :config
   (persistent-scratch-autosave-mode))
 
+(use-package posframe)
+
 (use-package powerline
   :custom
   (powerline-arrow-shape 'curve)
@@ -378,6 +392,10 @@
   (add-hook 'prog-mode-hook #'rainbow-mode))
 
 (use-package restclient)
+(use-package scala-mode
+  :interpreter
+  ("scala" . scala-mode))
+
 (use-package smart-mode-line-powerline-theme)
 (use-package smart-mode-line
   :custom
