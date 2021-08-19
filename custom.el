@@ -49,8 +49,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Extra Custom
-(add-to-list 'load-path "./custom/")
-(load-library "navigate")
+;; (add-to-list 'load-path "./custom/")
+;; (load-library "navigate")
+(load-file (make-relative-path "navigate.el"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
