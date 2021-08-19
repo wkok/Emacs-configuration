@@ -9,6 +9,7 @@
 ;;;
 ;;; (set-face-attribute 'default nil :height 100)
 (load-theme 'dracula t)
+(global-prettify-symbols-mode -1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -32,7 +33,35 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Files
+;;;
 (auto-save-visited-mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Git
+;;;
+(add-hook 'git-commit-setup-hook 'clj-dev-git-commit-setup)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Extra Custom
+(add-to-list 'load-path "./custom/")
+(load-library "navigate")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Formatting
+;;;
+;;; See: https://docs.cider.mx/cider/usage/code_completion.html
+(setq tab-always-indent 'complete)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 
 (provide 'custom)
 ;;; custom.el ends here
