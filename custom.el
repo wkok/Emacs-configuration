@@ -36,7 +36,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Files
 ;;;
-(auto-save-visited-mode)
+;;; (auto-save-visited-mode) ; this causes the cursor to jump to the begin/end of line after typing a space and it saves
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
