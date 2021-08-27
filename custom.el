@@ -10,6 +10,7 @@
 ;;; (set-face-attribute 'default nil :height 100)
 (load-theme 'dracula t)
 (global-prettify-symbols-mode -1)
+(use-package default-text-scale)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
