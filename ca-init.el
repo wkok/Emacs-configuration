@@ -160,6 +160,7 @@
   (add-hook 'text-mode-hook 'flyspell-mode)
   (add-hook 'prog-mode-hook 'flyspell-prog-mode))
 
+(use-package graphviz-dot-mode)
 (use-package gist)
 (use-package git-commit)
 (use-package git-auto-commit-mode
@@ -328,10 +329,16 @@
         org-startup-folded 'content
         org-cycle-separator-lines 2
         org-babel-clojure-backend 'cider)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((dot . t)
+     (calc . t)
+     (plantuml . t)))
   :custom
   (org-src-tab-acts-natively t)
   (org-hide-emphasis-markers t)
-  (org-agenda-files (list (file-truename "~/RoamNotes/"))))
+  (org-agenda-files (list (file-truename "~/RoamNotes/")
+                          (file-truename "~/RoamNotes/daily/"))))
 
 (use-package org-bullets
   :after org
@@ -350,12 +357,15 @@
          ("C-c n c" . org-roam.capture)
          ("C-c n j" . org-roam-dailies-capture-today))
   :config
-  (org-roam-setup))
-
+  (org-roam-setup)
+  (require 'org-roam-protocol)
+)
 (use-package paradox)
 (use-package persistent-scratch
   :config
   (persistent-scratch-autosave-mode))
+
+(use-package plantuml-mode)
 
 (use-package posframe)
 
@@ -475,6 +485,8 @@
 
 (use-package paren
   :init (show-paren-mode))
+
+(use-package vega-view)
 
 (use-package which-func
   :init (which-function-mode))
