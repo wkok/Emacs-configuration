@@ -42,13 +42,6 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Git
-;;;
-(add-hook 'git-commit-setup-hook 'clj-dev-git-commit-setup)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Extra Custom
 ;; (add-to-list 'load-path "./custom/")
 ;; (load-library "navigate")
