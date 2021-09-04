@@ -4,6 +4,18 @@
 
 ;;; Code:
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Macro to run elisp based on OS
+;;;
+(defmacro with-system (type &rest body)
+  "Evaluate BODY if `system-type' equals TYPE."
+  (declare (indent defun))
+  `(when (eq system-type ',type)
+     ,@body))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Look & Feel
 ;;;
@@ -19,8 +31,9 @@
 ;;;
 ;;; (smartparens-global-strict-mode t)
 ;;;
-;;; on windows clojure-lsp is on path so this can be nil
-(setq lsp-clojure-server-command nil)
+(with-system windows-nt
+  (setq lsp-clojure-server-command nil)
+  (setq cider-clojure-cli-command "powershell"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
