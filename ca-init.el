@@ -42,6 +42,8 @@
 (setq use-package-verbose t)
 (setq use-package-always-unsure t)
 
+(use-package async)
+
 (use-package auto-package-update
   :config
   (setq auto-package-update-delete-old-versions t)
@@ -67,6 +69,7 @@
   :custom
   (beacon-blink-duration 0.5))
 
+(use-package browse-at-remote)
 (use-package browse-kill-ring
   :config
   (browse-kill-ring-default-keybindings))
@@ -141,6 +144,13 @@
   :diminish eldoc-mode
   :config (global-eldoc-mode))
 
+
+(use-package ediff
+  :custom
+  (ediff-diff-options "-w")
+  (ediff-split-window-function (quote split-window-vertically))
+  (ediff-window-setup-function (quote ediff-setup-windows-plain)))
+
 (use-package elein)
 (use-package emmet-mode)
 (use-package expand-region
@@ -162,6 +172,9 @@
 
 (use-package graphviz-dot-mode)
 (use-package gist)
+(use-package gitlab)
+(use-package gitlab-ci-mode)
+(use-package gitlab-ci-mode-flycheck)
 (use-package git-commit)
 (use-package git-auto-commit-mode
   :custom
@@ -213,7 +226,7 @@
          (sh-mode . lsp))
 
   :bind (("M-?" . lsp-find-definition)
-         ("M-/" . lsp-find-references)
+         ;; ("M-/" . lsp-find-references)
          ("M-'" . lsp-treemacs-call-hierarchy))
   :config
   (setq gc-cons-threshold 100000000)
@@ -236,7 +249,7 @@
   ;; turn this on to capture client/server comms before
   ;; submitting bug reports with `lsp-workspace-show-log`
   ;; (lsp-log-io t)
-
+  (lsp-lens-enable nil) ; lovely feature but too slow
   (lsp-eldoc-enable-hover t)
   (lsp-enable-indentation nil)
   (lsp-enable-folding t)
@@ -256,6 +269,12 @@
   (setq lsp-ui-sideline-show-hover nil)
   (setq lsp-ui-doc-position 'bottom)
   (lsp-ui-doc-show))
+
+(use-package eredis)
+(use-package redis)
+(use-package tldr)
+
+(use-package rfc-mode)
 
 (use-package restclient
   :init
@@ -304,6 +323,7 @@
 
 (use-package nix-mode)
 (use-package ox-reveal)
+(use-package ox-asciidoc)
 
 (defun ca-org-mode-setup ()
   (org-indent-mode)
@@ -462,8 +482,6 @@
 (use-package wordnut)
 (use-package yaml-mode)
 
-(use-package yasnippet-snippets)
-
 (use-package yasnippet
   :custom
   (yas-verbosity 2)
@@ -472,6 +490,9 @@
   :config
   (yas-reload-all)
   (yas-global-mode))
+
+(use-package yasnippet-snippets
+  :after yasnippet)
 
 (setq dired-auto-revert-buffer 1)
 (setq dired-isearch-filenames 'dwim)
@@ -508,6 +529,27 @@
 (use-package ibuffer
   :bind (("C-x C-b" . ibuffer)))
 
+(use-package darkroom
+  :commands darkroom-mode
+  :config
+  (setq darkroom-text-scale-increase 1))
+
+(defun ac/enter-focus-mode ()
+  (interactive)
+  (darkroom-mode 1)
+  (display-line-numbers-mode 0))
+
+(defun ac/leave-focus-mode ()
+  (interactive)
+  (darkroom-mode 0)
+  (display-line-numbers-mode 1))
+
+(defun ac/toggle-focus-mode ()
+  (interactive)
+  (if (symbol-value darkroom-mode)
+      (ac/leave-focus-mode)
+    (ac/enter-focus-mode)))
+
 (use-package ibuffer-vc
   :defer t
   :init (add-hook 'ibuffer-hook
@@ -530,6 +572,8 @@
 ;;               ("m" . apply-macro-to-region-lines)
 ;;               :map selected-org-mode-map
 ;;               ("t" . org-table-convert-region)))
+
+(use-package typescript-mode)
 
 (use-package winner
   :config (winner-mode t))
