@@ -65,6 +65,10 @@
   (setq auto-revert-interval 1)
   (global-auto-revert-mode))
 
+(use-package log4j-mode
+  :config
+  (add-hook 'log4j-mode-hook #'auto-revert-tail-mode))
+
 (use-package beacon
   :custom
   (beacon-blink-duration 0.5))
@@ -426,11 +430,11 @@
   :interpreter
   ("scala" . scala-mode))
 
-(use-package smart-mode-line-powerline-theme)
-(use-package smart-mode-line
-  :custom
-  (sml/theme 'powerline)
-  :init (sml/setup))
+;; (use-package smart-mode-line-powerline-theme)
+;; (use-package smart-mode-line
+;;   :custom
+;;   (sml/theme 'powerline)
+;;   :init (sml/setup))
 
 (use-package smartparens
   :delight
@@ -501,9 +505,6 @@
 (use-package time
   :init (display-time-mode))
 
-(use-package linum
-  :init (global-linum-mode))
-
 (use-package paren
   :init (show-paren-mode))
 
@@ -528,11 +529,6 @@
 
 (use-package ibuffer
   :bind (("C-x C-b" . ibuffer)))
-
-(use-package darkroom
-  :commands darkroom-mode
-  :config
-  (setq darkroom-text-scale-increase 1))
 
 (defun ac/enter-focus-mode ()
   (interactive)
