@@ -67,7 +67,7 @@
 ;;; Formatting
 ;;;
 ;;; See: https://docs.cider.mx/cider/usage/code_completion.html
-(setq tab-always-indent 'complete)
+;; (setq tab-always-indent 'complete)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
