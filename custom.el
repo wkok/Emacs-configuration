@@ -71,6 +71,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Swiper
+;;;
+(use-package swiper)
+(global-set-key (kbd "C-s") 'swiper)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (provide 'custom)
 ;;; custom.el ends here
