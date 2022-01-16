@@ -89,5 +89,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;j
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Make completion popups lazier
+;;;
+(use-package company
+  :init (global-company-mode)
+  :custom
+  (company-tooltip-align-annotations t)
+  (company-minimum-prefix-length 3)
+  (company-idle-delay 2)
+  (company-show-numbers t))
+
 (provide 'custom)
 ;;; custom.el ends here
