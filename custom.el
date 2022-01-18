@@ -26,7 +26,7 @@
   :init
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs nil
+        modus-themes-bold-constructs t
         modus-themes-region '(bg-only no-extend))
 
   ;; Load the theme files before enabling a theme (else you get an error).
