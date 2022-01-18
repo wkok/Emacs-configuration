@@ -20,8 +20,24 @@
 ;;; Look & Feel
 ;;;
 ;;; (set-face-attribute 'default nil :height 100)
-(load-theme 'dracula t)
+;; (load-theme 'dracula t)
+(use-package modus-themes
+  :ensure                         ; omit this to use the built-in themes
+  :init
+  ;; Add all your customizations prior to loading the themes
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs nil
+        modus-themes-region '(bg-only no-extend))
+
+  ;; Load the theme files before enabling a theme (else you get an error).
+  (modus-themes-load-themes)
+  :config
+  ;; Load the theme of your choice:
+  (modus-themes-load-operandi) ;; OR (modus-themes-load-vivendi)
+  :bind ("<f5>" . modus-themes-toggle))
+
 (global-prettify-symbols-mode -1)
+
 (use-package default-text-scale)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
