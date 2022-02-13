@@ -106,15 +106,17 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Make completion popups lazier
+;;; Undo company-mode default nav key binding change because otherwise
+;;; we cannot ignore the company popup and still go to next line
+;;; See: https://github.com/company-mode/company-mode/blob/master/NEWS.md
 ;;;
-;; (use-package company
-  ;; :init (global-company-mode)
-  ;; :custom
-  ;; (company-tooltip-align-annotations t)
-  ;; (company-minimum-prefix-length 3)
-  ;; (company-idle-delay 2)
-  ;; (company-show-numbers t))
+(with-eval-after-load 'company
+  (dolist (map (list company-active-map company-search-map))
+    (define-key map (kbd "C-n") nil)
+    (define-key map (kbd "C-p") nil)
+    (define-key map (kbd "M-n") #'company-select-next)
+    (define-key map (kbd "M-p") #'company-select-previous)))
+
 
 (provide 'custom)
 ;;; custom.el ends here
