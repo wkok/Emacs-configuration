@@ -156,6 +156,10 @@
   (ediff-window-setup-function (quote ediff-setup-windows-plain)))
 
 (use-package elein)
+(use-package ejc-sql
+  :custom
+  (clomacs-httpd-default-port 8090))
+
 (use-package emmet-mode)
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
@@ -253,7 +257,7 @@
   ;; turn this on to capture client/server comms before
   ;; submitting bug reports with `lsp-workspace-show-log`
   ;; (lsp-log-io t)
-  (lsp-lens-enable nil) ; lovely feature but too slow
+  (lsp-lens-enable t)
   (lsp-eldoc-enable-hover t)
   (lsp-enable-indentation nil)
   (lsp-enable-folding t)
@@ -318,7 +322,10 @@
 (use-package markdown-mode
   :init
   ;; (add-hook 'markdown-mode-hook (lambda () (buffer-face-mode t)))
-  (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode)))
+  (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
+  :bind
+  ("M-<left>" . markdown-promote)
+  ("M-<right>" . markdown-demote))
 
 (use-package multiple-cursors
   :bind ("C->" . mc/mark-next-like-this)
@@ -377,6 +384,7 @@
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n i" . org-roam-node-insert)
+         ("C-c n d" . org-roam-dailies-goto-today)
          ("C-c n g" . org-roam-graph)
          ("C-c n c" . org-roam.capture)
          ("C-c n j" . org-roam-dailies-capture-today))
