@@ -75,7 +75,7 @@
 ;;; Extra Custom
 ;; (add-to-list 'load-path "./custom/")
 ;; (load-library "navigate")
-(load-file (make-relative-path "navigate.el"))
+;; (load-file (make-relative-path "navigate.el"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -90,8 +90,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Swiper
 ;;;
-(use-package swiper)
-(global-set-key (kbd "C-s") 'swiper)
+;; (use-package swiper)
+;; (global-set-key (kbd "C-s") 'swiper)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

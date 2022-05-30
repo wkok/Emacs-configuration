@@ -12,10 +12,15 @@
                      gcs-done)))
 
 
+;; (setq package-archives
+;;       '(("org" . "https://orgmode.org/elpa/")
+;;         ("melpa" . "http://melpa.org/packages/")
+;;         ("gnu" . "http://elpa.gnu.org/packages/")))
+
 (setq package-archives
-      '(("org" . "https://orgmode.org/elpa/")
-        ("melpa" . "http://melpa.org/packages/")
-        ("gnu" . "http://elpa.gnu.org/packages/")))
+      '(("org" . "~/.elpa-mirror/org/")
+        ("melpa" . "~/.elpa-mirror/melpa/")
+        ("gnu" . "~/.elpa-mirror/gnu/")))
 
 (setq use-package-always-ensure t)
 
