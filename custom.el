@@ -99,9 +99,9 @@
 ;;; Resolves issue where cider-jack-in-cljs did not work
 ;;; See: https://issueexplorer.com/issue/clojure-emacs/cider/3001
 ;;;
-(use-package exec-path-from-shell)
-(exec-path-from-shell-copy-env "PATH")
-(exec-path-from-shell-initialize)
+;; (use-package exec-path-from-shell)
+;; (exec-path-from-shell-copy-env "PATH")
+;; (exec-path-from-shell-initialize)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;j
 
 
