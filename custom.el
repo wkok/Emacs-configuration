@@ -50,6 +50,7 @@
 (with-system windows-nt
   (setq lsp-clojure-server-command nil)
   (setq cider-clojure-cli-command "powershell"))
+(setq lsp-lens-enable nil)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
