@@ -57,7 +57,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Plant UML
 ;;;
-(setq plantuml-jar-path "~/bin/plantuml/plantuml.jar")
+(setq plantuml-jar-path "/opt/plantuml/plantuml.jar")
 (setq plantuml-default-exec-mode 'jar)
 (setq plantuml-output-type "png")
 ;;; Enable plantuml-mode for PlantUML files
