@@ -51,6 +51,7 @@
   (setq lsp-clojure-server-command nil)
   (setq cider-clojure-cli-command "powershell"))
 (setq lsp-lens-enable nil)
+(use-package clj-deps-new)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
